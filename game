@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+import pygame
+import sys
+import random
+import time
+
+class Piece:
+    def __init__(self, image_string):
+        self.image_string = image_string
+        #self.image_surface = pygame.transform.scale(pygame.image.load(f"assets/{self.image_string}"), (100,100))
+        self.image_surface = pygame.image.load(f"assets/{self.image_string}").convert()
+
+class Game:
+    def __init__(self):
+        self.WIDTH = 800
+        self.HEIGHT = 800
+        self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
+        self.clock = pygame.time.Clock()
+        pygame.display.set_caption("Clickomania")
+
+        self.bg_surface = pygame.transform.scale(pygame.image.load('assets/bg.png'), (self.WIDTH, self.HEIGHT)).convert()
+        self.game_active = True
+
+        self.images_names = ['green.png', 'orange.png', 'red.png', 'blue.png', 'lightblue.png', 'pink.png', 'yellow.png']
+        self.pieces_obj = []
+        self.coordinates = [(0,200), (100,200), (200,200), (300,200), (400,200), (500,200),
+                            (0,300), (100,300), (200,300), (300,300), (400,300), (500,300),
+                            (0,400), (100,400), (200,400), (300,400), (400,400), (500,400),
+                            (0,500), (100,500), (200,500), (300,500), (400,500), (500,500)]
+
+        for i in range(6 * 8):
+            a = Piece(random.choice(self.images_names))
+            self.pieces_obj.append(a)
+ 
+        self.mainloop()
+
+    def ChangeImages(self):
+        # Here we wil just define the image names again (every like idk seconds)
+        pass
+
+    def play(self):
+        self.screen.blit(self.bg_surface,(0,0))
+
+        for piece in self.pieces_obj:
+            for coord in self.coordinates:
+                self.screen.blit(piece.image_surface, coord)
+
+    def endscreen(self):
+        pass
+
+    def main(self):
+        self.play()
+
+    def mainloop(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            self.main()
+
+            pygame.display.update()
+            self.clock.tick(60)
+
+if __name__ == "__main__":
+    g = Game()
