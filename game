@@ -7,13 +7,13 @@ import time
 class Piece:
     def __init__(self, image_string):
         self.image_string = image_string
-        #self.image_surface = pygame.transform.scale(pygame.image.load(f"assets/{self.image_string}"), (100,100))
-        self.image_surface = pygame.image.load(f"assets/{self.image_string}").convert()
+        self.image_surface = pygame.transform.scale(pygame.image.load(f"assets/{self.image_string}"), (100,100))
+        self.not_hit = True
 
 class Game:
     def __init__(self):
-        self.WIDTH = 800
-        self.HEIGHT = 800
+        self.WIDTH = 1000
+        self.HEIGHT = 900
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         self.clock = pygame.time.Clock()
         pygame.display.set_caption("Clickomania")
@@ -23,33 +23,42 @@ class Game:
 
         self.images_names = ['green.png', 'orange.png', 'red.png', 'blue.png', 'lightblue.png', 'pink.png', 'yellow.png']
         self.pieces_obj = []
-        self.coordinates = [(0,200), (100,200), (200,200), (300,200), (400,200), (500,200),
-                            (0,300), (100,300), (200,300), (300,300), (400,300), (500,300),
-                            (0,400), (100,400), (200,400), (300,400), (400,400), (500,400),
-                            (0,500), (100,500), (200,500), (300,500), (400,500), (500,500)]
+        self.coordinates = [(100,100), (200,100), (300,100), (400,100), (500,100), (600,100), (700,100), (800,100),
+                            (100,200), (200,200), (300,200), (400,200), (500,200), (600,200), (700,200), (800,200),
+                            (100,300), (200,300), (300,300), (400,300), (500,300), (600,300), (700,300), (800,300),
+                            (100,400), (200,400), (300,400), (400,400), (500,400), (600,400), (700,400), (800,400), 
+                            (100,500), (200,500), (300,500), (400,500), (500,500), (600,500), (700,500), (800,500),
+                            (100,600), (200,600), (300,600), (400,600), (500,600), (600,600), (700,600), (800,600), 
+                            (100,700), (200,700), (300,700), (400,700), (500,700), (600,700), (700,700), (800,700)] 
 
-        for i in range(6 * 8):
+        for i in range(56):
             a = Piece(random.choice(self.images_names))
             self.pieces_obj.append(a)
  
         self.mainloop()
 
     def ChangeImages(self):
-        # Here we wil just define the image names again (every like idk seconds)
         pass
 
-    def play(self):
-        self.screen.blit(self.bg_surface,(0,0))
+    def Collision(self):
+        pass
 
-        for piece in self.pieces_obj:
-            for coord in self.coordinates:
-                self.screen.blit(piece.image_surface, coord)
+    def ShowWords(self):
+        words_list = ['green', 'orange', 'red', 'blue', 'lightblue', 'pink', 'yellow']
+
+    def play(self):
+        for i in range(len(self.pieces_obj)):
+            if self.pieces_obj[i]:
+                self.screen.blit(self.pieces_obj[i].image_surface, self.coordinates[i])
 
     def endscreen(self):
         pass
 
     def main(self):
-        self.play()
+        if self.game_active:
+            self.play()
+        else:
+            self.endscreen()
 
     def mainloop(self):
         while True:
@@ -58,6 +67,7 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
+            self.screen.blit(self.bg_surface,(0,0))
             self.main()
 
             pygame.display.update()
