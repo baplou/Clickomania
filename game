@@ -30,6 +30,7 @@ class Game:
                             (100,500), (200,500), (300,500), (400,500), (500,500), (600,500), (700,500), (800,500),
                             (100,600), (200,600), (300,600), (400,600), (500,600), (600,600), (700,600), (800,600), 
                             (100,700), (200,700), (300,700), (400,700), (500,700), (600,700), (700,700), (800,700)] 
+        self.change_image_counter = 0
 
         for i in range(56):
             a = Piece(random.choice(self.images_names))
@@ -38,15 +39,20 @@ class Game:
         self.mainloop()
 
     def ChangeImages(self):
-        pass
-
-    def Collision(self):
-        pass
-
+        if self.change_image_counter >= 360:
+            self.pieces_obj = []
+            for i in range(56):
+                a = Piece(random.choice(self.images_names))
+                self.pieces_obj.append(a)
+            self.change_image_counter = 0
+     
     def ShowWords(self):
         words_list = ['green', 'orange', 'red', 'blue', 'lightblue', 'pink', 'yellow']
 
     def play(self):
+        self.change_image_counter += 1
+        self.ChangeImages()
+
         for i in range(len(self.pieces_obj)):
             if self.pieces_obj[i]:
                 self.screen.blit(self.pieces_obj[i].image_surface, self.coordinates[i])
@@ -66,6 +72,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                    # Here add the mouse collision detection thing
 
             self.screen.blit(self.bg_surface,(0,0))
             self.main()
