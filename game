@@ -2,7 +2,6 @@
 import pygame
 import sys
 import random
-import time
 
 pygame.init()
 
@@ -51,7 +50,6 @@ class Game:
         self.time_counter = 0
         self.time_num = 60
 
-        # making the 56 instances of Piece() class
         for i in range(56):
             a = Piece(random.choice(self.images_names))
             self.pieces_obj.append(a)
