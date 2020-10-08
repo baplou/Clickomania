@@ -36,7 +36,7 @@ class Game:
 
         self.words_list = ['green', 'orange', 'red', 'blue', 'lightblue', 'pink', 'yellow']
         self.color_word = random.choice(self.words_list)
-        color_dic = {
+        self.color_dic = {
             "green":(0,255,0),
             "orange":(255,165,0),
             "red":(255,0,0),
@@ -45,7 +45,7 @@ class Game:
             "pink":(255,192,203),
             "yellow":(255,255,0)
         }
-        self.color = color_dic[self.color_word]
+        self.color = self.color_dic[self.color_word]
         self.score = 0
         self.stopwatch_c = 0
         self.time_counter = 0
@@ -67,7 +67,7 @@ class Game:
             self.main_counter = 0
 
             self.color_word = random.choice(self.words_list)
-            color_dic = {
+            self.color_dic = {
                 "green":(0,255,0),
                 "orange":(255,165,0),
                 "red":(255,0,0),
@@ -76,7 +76,7 @@ class Game:
                 "pink":(255,192,203),
                 "yellow":(255,255,0)
             }
-            self.color = color_dic[self.color_word]
+            self.color = self.color_dic[self.color_word]
 
     def ShowWords(self):
         font = pygame.font.SysFont("comicsans", 50)
