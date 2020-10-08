@@ -74,6 +74,8 @@ class Game:
             a.setup()
 
             self.pieces_obj.append(a)
+
+        self.music()
  
         self.mainloop()
 
@@ -134,6 +136,11 @@ class Game:
         with open("highscore.txt","w") as h:
             h.write(str(new_high))
 
+    def music(self):
+        pygame.mixer.music.load('music/sound.wav')
+        pygame.mixer.music.set_volume(0.1)
+        pygame.mixer.music.play(-1)
+
     def play(self):
         self.change_images()
         self.event_function()
@@ -174,17 +181,12 @@ class Game:
         with open('highscore.txt','r') as h:
             self.high_score = int(h.readline())
 
-        return self.high_score
-
     def endscreen(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-        """
-        3. maybe? add music
-        """
         keys = pygame.key.get_pressed()
         if keys[pygame.K_r]:
             self.score = 0
