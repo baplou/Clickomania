@@ -4,6 +4,8 @@ import sys
 import random
 import time
 
+pygame.init()
+
 class Piece:
     def __init__(self, image_string):
         self.image_string = image_string
@@ -30,8 +32,26 @@ class Game:
                             (100,500), (200,500), (300,500), (400,500), (500,500), (600,500), (700,500), (800,500),
                             (100,600), (200,600), (300,600), (400,600), (500,600), (600,600), (700,600), (800,600), 
                             (100,700), (200,700), (300,700), (400,700), (500,700), (600,700), (700,700), (800,700)] 
-        self.change_image_counter = 0
+        self.main_counter = 0
 
+        self.words_list = ['green', 'orange', 'red', 'blue', 'lightblue', 'pink', 'yellow']
+        self.color_word = random.choice(self.words_list)
+        color_dic = {
+            "green":(0,255,0),
+            "orange":(255,165,0),
+            "red":(255,0,0),
+            "blue":(0,0,255),
+            "lightblue":(173,216,230),
+            "pink":(255,192,203),
+            "yellow":(255,255,0)
+        }
+        self.color = color_dic[self.color_word]
+        self.score = 0
+        self.stopwatch_c = 0
+        self.time_counter = 0
+        self.time_num = 60
+
+        # making the 56 instances of Piece() class
         for i in range(56):
             a = Piece(random.choice(self.images_names))
             self.pieces_obj.append(a)
@@ -39,19 +59,57 @@ class Game:
         self.mainloop()
 
     def ChangeImages(self):
-        if self.change_image_counter >= 360:
+        if self.main_counter >= 180:
             self.pieces_obj = []
             for i in range(56):
                 a = Piece(random.choice(self.images_names))
                 self.pieces_obj.append(a)
-            self.change_image_counter = 0
-     
+            self.main_counter = 0
+
+            self.color_word = random.choice(self.words_list)
+            color_dic = {
+                "green":(0,255,0),
+                "orange":(255,165,0),
+                "red":(255,0,0),
+                "blue":(0,0,255),
+                "lightblue":(173,216,230),
+                "pink":(255,192,203),
+                "yellow":(255,255,0)
+            }
+            self.color = color_dic[self.color_word]
+
     def ShowWords(self):
-        words_list = ['green', 'orange', 'red', 'blue', 'lightblue', 'pink', 'yellow']
+        font = pygame.font.SysFont("comicsans", 50)
+
+        color_label = font.render(f"Click all {self.color_word} squares!", 1, self.color)
+        score_label = font.render(f"Score: {self.score}", 1, (255,255,255))
+        stopwatch_label = font.render(f"{self.stopwatch_c}", 1, (255,255,255))
+        time_label = font.render(f"Time Left: {self.time_num}", 1, (255,255,255))
+
+        self.screen.blit(color_label, (100,25))
+        self.screen.blit(score_label, (770,25))
+        self.screen.blit(stopwatch_label, (100,825))
+        self.screen.blit(time_label, (700,825))
 
     def play(self):
-        self.change_image_counter += 1
+        self.main_counter += 1
+        self.time_counter += 1
+
+        if self.time_counter >= 60:
+            self.time_num -= 1
+            self.time_counter = 0
+
+        if self.main_counter >= 180:
+            self.stopwatch_c = 0
+        elif self.main_counter >= 135:
+            self.stopwatch_c = 1
+        elif self.main_counter >= 90:
+            self.stopwatch_c = 2
+        elif self.main_counter >= 45:
+            self.stopwatch_c = 3
+
         self.ChangeImages()
+        self.ShowWords()
 
         for i in range(len(self.pieces_obj)):
             if self.pieces_obj[i]:
@@ -72,7 +130,8 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                    # Here add the mouse collision detection thing
+                    # add the mouse collision detection thing here
+                    # since the images are squares we can use rectangle detection
 
             self.screen.blit(self.bg_surface,(0,0))
             self.main()
