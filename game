@@ -131,6 +131,9 @@ class Game:
         self.change_images()
         self.event_function()
 
+        if self.time_num <= 0:
+            self.game_active = False
+
         self.main_counter += 1
         self.time_counter += 1
 
@@ -157,7 +160,27 @@ class Game:
                 self.pieces_obj[i].setup()
 
     def endscreen(self):
-        pass
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_r]:
+            self.score = 0
+            self.game_active = True
+            self.time_num = 60
+            self.stopwatch_c = 0
+
+        dead_font = pygame.font.SysFont("comicsans", 50)
+
+        dead_label = dead_font.render("Your time ran out!", 1, (255,255,255))
+        score_dead_label = dead_font.render(f"You finished with a score of {self.score}!", 1, (255,255,255))
+        key_dead_label = dead_font.render("Press 'r' to restart", 1, (255,255,255))
+
+        self.screen.blit(dead_label, (100,300))
+        self.screen.blit(score_dead_label, (100,400))
+        self.screen.blit(key_dead_label, (100,500))
 
     def main(self):
         self.screen.blit(self.bg_surface,(0,0))
