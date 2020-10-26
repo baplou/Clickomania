@@ -5,217 +5,218 @@ import random
 
 pygame.init()
 
-class Piece:
-    def __init__(self, image_string):
-        self.image_string = image_string
-        self.image_surface = pygame.transform.scale(pygame.image.load(f"assets/{self.image_string}"), (100,100))
-        self.xcor = 0
-        self.ycor = 0
-        self.hit = False
-        self.rect = None
+class Piece(object):
+  def __init__(self, image_string):
+    self.image_string = image_string
+    self.image_surface = pygame.transform.scale(pygame.image.load(f"assets/{self.image_string}"), (100,100))
+    self.xcor = 0
+    self.ycor = 0
+    self.hit = False
+    self.rect = None
 
-    def setup(self):
-        self.rect = self.image_surface.get_rect(center = (self.xcor, self.ycor))
+  def setup(self):
+    self.rect = self.image_surface.get_rect(center = (self.xcor, self.ycor))
 
-class Game:
-    def __init__(self):
-        self.WIDTH = 1000
-        self.HEIGHT = 900
-        self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        self.clock = pygame.time.Clock()
-        pygame.display.set_caption("Clickomania")
+class Game(object):
+  def __init__(self):
+    self.WIDTH = 1000
+    self.HEIGHT = 900
+    self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
+    self.clock = pygame.time.Clock()
+    pygame.display.set_caption("Clickomania")
 
-        self.bg_surface = pygame.transform.scale(pygame.image.load('assets/bg.png'), (self.WIDTH, self.HEIGHT)).convert()
-        self.game_active = True
+    self.bg_surface = pygame.transform.scale(pygame.image.load('assets/bg.png'), (self.WIDTH, self.HEIGHT)).convert()
+    self.game_active = True
 
-        self.images_names = ['green.png', 'orange.png', 'red.png', 'blue.png', 'lightblue.png', 'pink.png', 'yellow.png']
-        self.pieces_obj = []
-        self.coordinates = [(100,100), (200,100), (300,100), (400,100), (500,100), (600,100), (700,100), (800,100),
-                            (100,200), (200,200), (300,200), (400,200), (500,200), (600,200), (700,200), (800,200),
-                            (100,300), (200,300), (300,300), (400,300), (500,300), (600,300), (700,300), (800,300),
-                            (100,400), (200,400), (300,400), (400,400), (500,400), (600,400), (700,400), (800,400), 
-                            (100,500), (200,500), (300,500), (400,500), (500,500), (600,500), (700,500), (800,500),
-                            (100,600), (200,600), (300,600), (400,600), (500,600), (600,600), (700,600), (800,600), 
-                            (100,700), (200,700), (300,700), (400,700), (500,700), (600,700), (700,700), (800,700)] 
-        self.main_counter = 0
+    self.images_names = ['green.png', 'orange.png', 'red.png', 'blue.png', 'lightblue.png', 'pink.png', 'yellow.png']
+    self.pieces_obj = []
+    self.coordinates = [(100,100), (200,100), (300,100), (400,100), (500,100), (600,100), (700,100), (800,100),
+                        (100,200), (200,200), (300,200), (400,200), (500,200), (600,200), (700,200), (800,200),
+                        (100,300), (200,300), (300,300), (400,300), (500,300), (600,300), (700,300), (800,300),
+                        (100,400), (200,400), (300,400), (400,400), (500,400), (600,400), (700,400), (800,400), 
+                        (100,500), (200,500), (300,500), (400,500), (500,500), (600,500), (700,500), (800,500),
+                        (100,600), (200,600), (300,600), (400,600), (500,600), (600,600), (700,600), (800,600), 
+                        (100,700), (200,700), (300,700), (400,700), (500,700), (600,700), (700,700), (800,700)] 
+    self.main_counter = 0
 
-        self.words_list = ['green', 'orange', 'red', 'blue', 'lightblue', 'pink', 'yellow']
-        self.color_word = random.choice(self.words_list)
-        self.color_dic = {
-            "green":(0,255,0),
-            "orange":(255,165,0),
-            "red":(255,0,0),
-            "blue":(0,0,255),
-            "lightblue":(173,216,230),
-            "pink":(255,192,203),
-            "yellow":(255,255,0)
-        }
-        self.color = self.color_dic[self.color_word]
-        self.score = 0
-        self.stopwatch_c = 0
-        self.time_counter = 0
-        self.time_num = 60
-        self.high_score = 0
+    self.words_list = ['green', 'orange', 'red', 'blue', 'lightblue', 'pink', 'yellow']
+    self.color_word = random.choice(self.words_list)
+    self.color_dic = {
+      "green":(0,255,0),
+      "orange":(255,165,0),
+      "red":(255,0,0),
+      "blue":(0,0,255),
+      "lightblue":(173,216,230),
+      "pink":(255,192,203),
+      "yellow":(255,255,0)
+    }
+    self.color = self.color_dic[self.color_word]
+    self.score = 0
+    self.stopwatch_c = 0
+    self.time_counter = 0
+    self.time_num = 60
+    self.high_score = 0
 
-        self.event_color_dic = {
-            "green.png":"green",
-            "orange.png":"orange",
-            "red.png":"red",
-            "blue.png":"blue",
-            "lightblue.png":"lightblue",
-            "pink.png":"pink",
-            "yellow.png":"yellow"
-        }
+    self.event_color_dic = {
+      "green.png":"green",
+      "orange.png":"orange",
+      "red.png":"red",
+      "blue.png":"blue",
+      "lightblue.png":"lightblue",
+      "pink.png":"pink",
+      "yellow.png":"yellow"
+    }
 
-        for i in range(56):
-            a = Piece(random.choice(self.images_names))
-            a.xcor = self.coordinates[i][0]
-            a.ycor = self.coordinates[i][1]
-            a.setup()
+    for i in range(56):
+      a = Piece(random.choice(self.images_names))
+      a.xcor = self.coordinates[i][0]
+      a.ycor = self.coordinates[i][1]
+      a.setup()
 
-            self.pieces_obj.append(a)
+      self.pieces_obj.append(a)
 
-        self.music()
-        self.mainloop()
+    self.music()
+    self.mainloop()
 
-    def change_images(self):
-        if self.main_counter >= 180:
-            self.pieces_obj = []
-            for i in range(56):
-                a = Piece(random.choice(self.images_names))
-                self.pieces_obj.append(a)
-            self.main_counter = 0
+  def change_images(self):
+    if self.main_counter >= 180:
+      self.pieces_obj = []
+      for i in range(56):
+        a = Piece(random.choice(self.images_names))
+        self.pieces_obj.append(a)
+      self.main_counter = 0
 
-            self.color_word = random.choice(self.words_list)
-            self.color_dic = {
-                "green":(0,255,0),
-                "orange":(255,165,0),
-                "red":(255,0,0),
-                "blue":(0,0,255),
-                "lightblue":(173,216,230),
-                "pink":(255,192,203),
-                "yellow":(255,255,0)
-            }
-            self.color = self.color_dic[self.color_word]
+      self.color_word = random.choice(self.words_list)
+      self.color_dic = {
+        "green":(0,255,0),
+        "orange":(255,165,0),
+        "red":(255,0,0),
+        "blue":(0,0,255),
+        "lightblue":(173,216,230),
+        "pink":(255,192,203),
+        "yellow":(255,255,0)
+      }
+      self.color = self.color_dic[self.color_word]
 
-    def show_words(self):
-        font = pygame.font.SysFont("comicsans", 50)
+  def show_words(self):
+    font = pygame.font.SysFont("comicsans", 50)
 
-        color_label = font.render(f"Click all {self.color_word} squares!", 1, self.color)
-        score_label = font.render(f"Score: {self.score}", 1, (255,255,255))
-        stopwatch_label = font.render(f"{self.stopwatch_c}", 1, (255,255,255))
-        time_label = font.render(f"Time Left: {self.time_num}", 1, (255,255,255))
-        high_score_label = font.render(f"High Score: {self.high_score}", 1, (255,255,255))
+    color_label = font.render(f"Click all {self.color_word} squares!", 1, self.color)
+    score_label = font.render(f"Score: {self.score}", 1, (255,255,255))
+    stopwatch_label = font.render(f"{self.stopwatch_c}", 1, (255,255,255))
+    time_label = font.render(f"Time Left: {self.time_num}", 1, (255,255,255))
+    high_score_label = font.render(f"High Score: {self.high_score}", 1, (255,255,255))
 
-        self.screen.blit(color_label, (100,25))
-        self.screen.blit(time_label, (700,825))
-        self.screen.blit(high_score_label, (400,825))
+    # blit score and stopwatch label
+    self.screen.blit(color_label, (100,25))
+    self.screen.blit(time_label, (700,825))
+    self.screen.blit(high_score_label, (400,825))
 
-    def event_function(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and self.game_active:
-                try:
-                    x = event.pos[0] - 30
-                    y = event.pos[1] - 30
-                    for piece in self.pieces_obj:
-                        if piece.rect.collidepoint(x,y):
-                            a = self.event_color_dic[piece.image_string]
-                            if a == self.color_word:
-                                self.score += 1
-                                piece.hit = True
-                except:
-                    pass
+  def event_function(self):
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+        pygame.quit()
+        sys.exit()
+      if event.type == pygame.MOUSEBUTTONDOWN and self.game_active:
+        try:
+          x = event.pos[0] - 30
+          y = event.pos[1] - 30
+          for piece in self.pieces_obj:
+            if piece.rect.collidepoint(x,y):
+              a = self.event_color_dic[piece.image_string]
+              if a == self.color_word:
+                self.score += 1
+                piece.hit = True
+        except:
+          pass
 
-    def write_high_score(self, new_high):
-        with open("highscore.txt","w") as h:
-            h.write(str(new_high))
+  def write_high_score(self, new_high):
+    with open("highscore.txt","w") as h:
+      h.write(str(new_high))
 
-    def music(self):
-        pygame.mixer.music.load('music/sound.wav')
-        pygame.mixer.music.set_volume(0.1)
-        pygame.mixer.music.play(-1)
+  def music(self):
+    pygame.mixer.music.load('music/sound.wav')
+    pygame.mixer.music.set_volume(0.1)
+    pygame.mixer.music.play(-1)
 
-    def play(self):
-        self.change_images()
-        self.event_function()
-        self.read_high_score()
+  def play(self):
+    self.change_images()
+    self.event_function()
+    self.read_high_score()
 
-        if self.time_num <= 0:
-            if self.score > self.high_score:
-                self.write_high_score(self.score)
+    if self.time_num <= 0:
+      if self.score > self.high_score:
+        self.write_high_score(self.score)
 
-            self.game_active = False
+      self.game_active = False
 
-        self.main_counter += 1
-        self.time_counter += 1
+    self.main_counter += 1
+    self.time_counter += 1
 
-        if self.time_counter >= 60:
-            self.time_num -= 1
-            self.time_counter = 0
+    if self.time_counter >= 60:
+      self.time_num -= 1
+      self.time_counter = 0
 
-        if self.main_counter >= 180:
-            self.stopwatch_c = 0
-        elif self.main_counter >= 135:
-            self.stopwatch_c = 1
-        elif self.main_counter >= 90:
-            self.stopwatch_c = 2
-        elif self.main_counter >= 45:
-            self.stopwatch_c = 3
+    if self.main_counter >= 180:
+      self.stopwatch_c = 0
+    elif self.main_counter >= 135:
+      self.stopwatch_c = 1
+    elif self.main_counter >= 90:
+      self.stopwatch_c = 2
+    elif self.main_counter >= 45:
+      self.stopwatch_c = 3
 
-        self.show_words()
+    self.show_words()
 
-        for i in range(len(self.pieces_obj)):
-            if not self.pieces_obj[i].hit:
-                self.pieces_obj[i].xcor = self.coordinates[i][0]
-                self.pieces_obj[i].ycor = self.coordinates[i][1]
-                self.screen.blit(self.pieces_obj[i].image_surface, self.coordinates[i])
-                self.pieces_obj[i].setup()
+    for i in range(len(self.pieces_obj)):
+      if not self.pieces_obj[i].hit:
+        self.pieces_obj[i].xcor = self.coordinates[i][0]
+        self.pieces_obj[i].ycor = self.coordinates[i][1]
+        self.screen.blit(self.pieces_obj[i].image_surface, self.coordinates[i])
+        self.pieces_obj[i].setup()
 
-    def read_high_score(self):
-        with open('highscore.txt','r') as h:
-            self.high_score = int(h.readline())
+  def read_high_score(self):
+    with open('highscore.txt','r') as h:
+      self.high_score = int(h.readline())
 
-    def endscreen(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+  def endscreen(self):
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+        pygame.quit()
+        sys.exit()
 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_r]:
-            self.score = 0
-            self.game_active = True
-            self.time_num = 60
-            self.stopwatch_c = 0
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_r]:
+      self.score = 0
+      self.game_active = True
+      self.time_num = 60
+      self.stopwatch_c = 0
 
-        dead_font = pygame.font.SysFont("comicsans", 50)
+    dead_font = pygame.font.SysFont("comicsans", 50)
 
-        dead_label = dead_font.render("Your time ran out!", 1, (255,255,255))
-        score_dead_label = dead_font.render(f"You finished with a score of {self.score}!", 1, (255,255,255))
-        key_dead_label = dead_font.render("Press 'r' to restart", 1, (255,255,255))
-        high_score_dead_label = dead_font.render(f"You finished with a high score of {self.high_score}!", 1, (255,255,255))
+    dead_label = dead_font.render("Your time ran out!", 1, (255,255,255))
+    score_dead_label = dead_font.render(f"You finished with a score of {self.score}!", 1, (255,255,255))
+    key_dead_label = dead_font.render("Press 'r' to restart", 1, (255,255,255))
+    high_score_dead_label = dead_font.render(f"You finished with a high score of {self.high_score}!", 1, (255,255,255))
 
-        self.screen.blit(dead_label, (100,300))
-        self.screen.blit(score_dead_label, (100,400))
-        self.screen.blit(key_dead_label, (100,500))
-        self.screen.blit(high_score_dead_label, (100,600))
+    self.screen.blit(dead_label, (100,300))
+    self.screen.blit(score_dead_label, (100,400))
+    self.screen.blit(key_dead_label, (100,500))
+    self.screen.blit(high_score_dead_label, (100,600))
 
-    def main(self):
-        self.screen.blit(self.bg_surface,(0,0))
-        if self.game_active:
-            self.play()
-        else:
-            self.endscreen()
+  def main(self):
+    self.screen.blit(self.bg_surface,(0,0))
+    if self.game_active:
+      self.play()
+    else:
+      self.endscreen()
 
-    def mainloop(self):
-        while True:
-            self.main()
+  def mainloop(self):
+    while True:
+      self.main()
 
-            pygame.display.update()
-            self.clock.tick(60)
+      pygame.display.update()
+      self.clock.tick(60)
 
 if __name__ == "__main__":
-    g = Game()
+  g = Game()
