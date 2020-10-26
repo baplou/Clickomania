@@ -107,8 +107,9 @@ class Game(object):
     time_label = font.render(f"Time Left: {self.time_num}", 1, (255,255,255))
     high_score_label = font.render(f"High Score: {self.high_score}", 1, (255,255,255))
 
-    # blit score and stopwatch label
     self.screen.blit(color_label, (100,25))
+    self.screen.blit(score_label, (770,25))
+    self.screen.blit(stopwatch_label, (100,825))
     self.screen.blit(time_label, (700,825))
     self.screen.blit(high_score_label, (400,825))
 
